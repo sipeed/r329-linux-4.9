@@ -143,6 +143,8 @@
 #define SUPPORT_LVDS
 #define DEVICE_LVDS_NUM 2
 #define SUNXI_DSI_PASSIVE_BUG
+#define IOMMU_DE0_MASTOR_ID 0
+#define IOMMU_DE1_MASTOR_ID 1
 /*#define DE_WB_RESET_SHARE*/
 
 /* #define SUPPORT_EINK */
@@ -421,6 +423,11 @@
 
 #ifndef SUPPORT_VDPO
 #define DEVICE_VDPO_NUM 0
+#endif
+
+#ifndef IOMMU_DE0_MASTOR_ID
+#define IOMMU_DE0_MASTOR_ID 0
+#define IOMMU_DE1_MASTOR_ID 0
 #endif
 
 struct de_feat {

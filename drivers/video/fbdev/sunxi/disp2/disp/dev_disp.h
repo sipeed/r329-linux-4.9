@@ -294,10 +294,6 @@ extern s32 disp_vdpo_set_config(struct disp_device *p_vdpo,
 			 struct disp_vdpo_config *p_cfg);
 #endif /*endif SUPPORT_VDPO */
 
-#if defined(CONFIG_SUNXI_IOMMU)
-#define DE_MASTOR_ID 0
-extern void sunxi_enable_device_iommu(unsigned int mastor_id, bool flag);
-#endif
 struct disp_ion_mem *disp_ion_malloc(u32 num_bytes, void *phys_addr);
 void disp_ion_free(void *virt_addr, void *phys_addr, u32 num_bytes);
 void disp_ion_flush_cache(void *startAddr, int size);

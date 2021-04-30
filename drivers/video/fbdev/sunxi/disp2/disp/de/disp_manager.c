@@ -50,6 +50,8 @@ struct disp_manager_private_data {
 	struct disp_irq_info irq_info;
 	wait_queue_head_t wait_rcq_finish_queue;
 	atomic_t wati_rcq_finish_flag;
+	bool iommu_en_flag;
+	unsigned int iommu_master_id;
 };
 
 static spinlock_t mgr_data_lock;
@@ -2563,13 +2565,15 @@ static s32 disp_mgr_sw_enable(struct disp_manager *mgr)
 	unsigned int width = 0, height = 0;
 	unsigned int cs = 0, color_range = DISP_COLOR_RANGE_0_255;
 	struct disp_device_config dev_config;
-	struct disp_device *dispdev;
-	unsigned long curtime;
-	unsigned int curline0, curline1;
 	struct disp_enhance *enhance = NULL;
 	struct disp_smbl *smbl = NULL;
 	struct disp_layer *lyr = NULL;
+#if RTMX_USE_RCQ
+	struct disp_device *dispdev;
+	unsigned long curtime;
+	unsigned int curline0, curline1;
 	unsigned long cnt = 0;
+#endif
 
 	memset(&dev_config, 0, sizeof(struct disp_device_config));
 	if ((mgr == NULL) || (mgrp == NULL)) {
@@ -2663,7 +2667,7 @@ static s32 disp_mgr_sw_enable(struct disp_manager *mgr)
 		disp_mgr_sync(mgr, true);
 #if defined(CONFIG_SUNXI_IOMMU)
 		DISP_TRACE_BEGIN("enable_iommu");
-		sunxi_enable_device_iommu(DE_MASTOR_ID, true);
+		mgr->enable_iommu(mgr, true);
 		DISP_TRACE_END("enable_iommu");
 #endif
 		curline1 = disp_al_device_get_cur_line(dispdev->hwdev_index);
@@ -2691,33 +2695,7 @@ static s32 disp_mgr_sw_enable(struct disp_manager *mgr)
 #else
 	disp_mgr_apply(mgr);
 
-	/* wait for vertical blank period */
-	dispdev = mgr->device;
-	if (dispdev && dispdev->usec_before_vblank) {
-		curtime = jiffies;
-		while (dispdev->usec_before_vblank(dispdev) != 0) {
-			if (time_after(jiffies, curtime + msecs_to_jiffies(50)))
-				break;
-			cnt++;
-			if (cnt >= 1000 * 1000)
-				break;
-		}
-	}
 
-	if (dispdev) {
-		curline0 = disp_al_device_get_cur_line(dispdev->hwdev_index);
-		disp_mgr_sync(mgr, true);
-#if defined(CONFIG_SUNXI_IOMMU)
-		sunxi_enable_device_iommu(DE_MASTOR_ID, true);
-#endif
-		curline1 = disp_al_device_get_cur_line(dispdev->hwdev_index);
-		if (dispdev->is_in_safe_period) {
-			if (!dispdev->is_in_safe_period(dispdev)) {
-				DE_WRN("sync at non-safe period,start=%d,end=%d line\n",
-				       curline0, curline1);
-			}
-		}
-	}
 #endif
 
 	enhance = mgr->enhance;
@@ -2808,7 +2786,7 @@ static s32 disp_mgr_dump(struct disp_manager *mgr, char *buf)
 
 	count += sprintf(
 	    buf + count,
-	    "mgr%d: %dx%d fmt[%s] cs[0x%x] range[%s] eotf[0x%x] bits[%s] err[%u] force_sync[%u] %s direct_show[%s]\n",
+	    "mgr%d: %dx%d fmt[%s] cs[0x%x] range[%s] eotf[0x%x] bits[%s] err[%u] force_sync[%u] %s direct_show[%s] iommu[%d]\n",
 	    mgr->disp, mgrp->cfg->config.size.width, mgrp->cfg->config.size.height,
 	    (mgrp->cfg->config.cs < 4) ? fmt_name[mgrp->cfg->config.cs]
 				       : "undef",
@@ -2821,7 +2799,7 @@ static s32 disp_mgr_dump(struct disp_manager *mgr, char *buf)
 		mgrp->err_cnt,
 		 mgrp->force_sync_cnt,
 		 (mgrp->cfg->config.blank) ? "blank" : "unblank",
-	    (direct_show) ? "true" : "false");
+	    (direct_show) ? "true" : "false", mgrp->iommu_en_flag);
 
 	count += sprintf(
 	    buf + count,
@@ -2869,6 +2847,20 @@ s32 disp_mgr_set_ksc_para(struct disp_manager *mgr,
 	spin_unlock_irqrestore(&mgr_data_lock, flags);
 
 	return mgr->apply(mgr);
+}
+
+extern void sunxi_enable_device_iommu(unsigned int mastor_id, bool flag);
+
+static s32 disp_mgr_enable_iommu(struct disp_manager *mgr, bool en)
+{
+#if defined(CONFIG_SUNXI_IOMMU)
+	struct disp_manager_private_data *mgrp = disp_mgr_get_priv(mgr);
+
+	if (mgrp->iommu_en_flag != en)
+		sunxi_enable_device_iommu(mgrp->iommu_master_id, en);
+	mgrp->iommu_en_flag = en;
+#endif
+	return 0;
 }
 
 s32 disp_init_mgr(struct disp_bsp_init_para *para)
@@ -2942,6 +2934,9 @@ s32 disp_init_mgr(struct disp_bsp_init_para *para)
 			atomic_set(&mgrp->wati_rcq_finish_flag, 0);
 		}
 
+		mgrp->iommu_master_id =
+		    (disp == 0) ? IOMMU_DE0_MASTOR_ID : IOMMU_DE1_MASTOR_ID;
+
 		mgr->enable = disp_mgr_enable;
 		mgr->sw_enable = disp_mgr_sw_enable;
 		mgr->disable = disp_mgr_disable;
@@ -2973,6 +2968,7 @@ s32 disp_init_mgr(struct disp_bsp_init_para *para)
 		mgr->force_apply = disp_mgr_force_apply;
 		mgr->sync = disp_mgr_sync;
 		mgr->tasklet = disp_mgr_tasklet;
+		mgr->enable_iommu = disp_mgr_enable_iommu;
 
 		if (disp_feat_is_using_rcq(disp))
 			mgr->reg_protect = disp_mgr_protect_reg_for_rcq;

@@ -2238,10 +2238,6 @@ static s32 disp_init(struct platform_device *pdev)
 								output_cs;
 		g_disp_drv.disp_init.output_eotf[para->boot_info.disp] =
 								output_eotf;
-	} else {
-#if defined(CONFIG_SUNXI_IOMMU)
-		sunxi_enable_device_iommu(DE_MASTOR_ID, true);
-#endif
 	}
 
 	para->feat_init.chn_cfg_mode = g_disp_drv.disp_init.chn_cfg_mode;
@@ -3231,10 +3227,8 @@ static void disp_shutdown(struct platform_device *pdev)
 		    && mgr->device->disable)
 			if (mgr->device->is_enabled(mgr->device))
 				mgr->device->disable(mgr->device);
+		mgr->enable_iommu(mgr, false);
 	}
-#if defined(CONFIG_SUNXI_IOMMU)
-	sunxi_enable_device_iommu(DE_MASTOR_ID, false);
-#endif
 }
 
 #ifdef EINK_FLUSH_TIME_TEST

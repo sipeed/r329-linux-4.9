@@ -1659,6 +1659,7 @@ int disp_lcd_set_layer(struct lcd_fb_device *lcd, struct fb_info *p_info)
 	len *= lcdp->panel_info.lines_per_transfer;
 
 	if (p_info) {
+		ret = lcdp->lcd_panel_fun.set_var(lcd->disp, p_info);
 		addr = (unsigned char *)p_info->screen_base +
 			p_info->var.yoffset * p_info->fix.line_length;
 		end_addr = (unsigned char *)addr + p_info->fix.smem_len;

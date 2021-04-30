@@ -73,6 +73,10 @@
 #define DEVICE_DSI_NUM 1
 #endif /*endif DEVICE_DSI_NUM */
 
+#ifndef IOMMU_DE0_MASTOR_ID
+#define IOMMU_DE0_MASTOR_ID 0
+#define IOMMU_DE1_MASTOR_ID 0
+#endif
 
 struct de_feat {
 	const int num_screens;/* indicate layer manager number */

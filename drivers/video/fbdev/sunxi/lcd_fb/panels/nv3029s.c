@@ -62,6 +62,8 @@ static struct disp_panel_para info[LCD_FB_MAX];
 
 static void address(unsigned int sel, int x, int y, int width, int height)
 {
+	// lcd_fb_wrn("[address] %d %d %d %d\n", x, y, width, height);
+	
 	sunxi_lcd_cmd_write(sel, 0x2B); /* Set row address */
 	sunxi_lcd_para_write(sel, (y >> 8) & 0xff);
 	sunxi_lcd_para_write(sel, y & 0xff);
@@ -84,140 +86,168 @@ static void LCD_panel_init(unsigned int sel)
 		return;
 	}
 
-	sunxi_lcd_cmd_write(sel, 0xfd);
-	sunxi_lcd_para_write(sel, 0x06);
-	sunxi_lcd_para_write(sel, 0x07);
+	sunxi_lcd_cmd_write(sel, 0x01);
+	sunxi_lcd_delay_ms(50);
+	sunxi_lcd_cmd_write(sel, 0x11);
+	sunxi_lcd_delay_ms(120);
 
-	sunxi_lcd_cmd_write(sel, 0x60);
-	sunxi_lcd_para_write(sel, 0x14);
-	sunxi_lcd_para_write(sel, 0x08);
+	// sunxi_lcd_cmd_write(sel, 0xB2);			
+	// sunxi_lcd_para_write(sel, 0x0C);
+	// sunxi_lcd_para_write(sel, 0x0C); 
+	// sunxi_lcd_para_write(sel, 0x00); 
+	// sunxi_lcd_para_write(sel, 0x33); 
+	// sunxi_lcd_para_write(sel, 0x33); 			
 
-	sunxi_lcd_cmd_write(sel, 0xB6);
-	sunxi_lcd_para_write(sel, 0x22);
-	sunxi_lcd_para_write(sel, 0x60);
-	sunxi_lcd_para_write(sel, 0x27);
+	// sunxi_lcd_cmd_write(sel, 0xB7);			
+	// sunxi_lcd_para_write(sel, 0x35);
 
-	sunxi_lcd_cmd_write(sel, 0xF0);
-	sunxi_lcd_para_write(sel, 0x18);
+	// sunxi_lcd_cmd_write(sel, 0xBB);			
+	// sunxi_lcd_para_write(sel, 0x32); //Vcom=1.35V
+					
+	// sunxi_lcd_cmd_write(sel, 0xC2);
+	// sunxi_lcd_para_write(sel, 0x01);
 
-	sunxi_lcd_cmd_write(sel, 0xB1);
-	sunxi_lcd_para_write(sel, 0x61);
-	sunxi_lcd_para_write(sel, 0x01);
+	// sunxi_lcd_cmd_write(sel, 0xC3);			
+	// sunxi_lcd_para_write(sel, 0x15); //GVDD=4.8V  颜色深度
+				
+	// sunxi_lcd_cmd_write(sel, 0xC4);			
+	// sunxi_lcd_para_write(sel, 0x20); //VDV, 0x20:0v
 
-	sunxi_lcd_cmd_write(sel, 0x62);
-	sunxi_lcd_para_write(sel, 0x87);
+	// sunxi_lcd_cmd_write(sel, 0xC6);			
+	// sunxi_lcd_para_write(sel, 0x0F); //0x0F:60Hz        	
 
-	sunxi_lcd_cmd_write(sel, 0x63);
-	sunxi_lcd_para_write(sel, 0xa9);
+	// sunxi_lcd_cmd_write(sel, 0xD0);			
+	// sunxi_lcd_para_write(sel, 0xA4);
+	// sunxi_lcd_para_write(sel, 0xA1); 
 
-	sunxi_lcd_cmd_write(sel, 0x64);
-	sunxi_lcd_para_write(sel, 0x19);
-	sunxi_lcd_para_write(sel, 0x12);
+	// sunxi_lcd_cmd_write(sel, 0xE0);
+	// sunxi_lcd_para_write(sel, 0xD0);   
+	// sunxi_lcd_para_write(sel, 0x08);   
+	// sunxi_lcd_para_write(sel, 0x0E);   
+	// sunxi_lcd_para_write(sel, 0x09);   
+	// sunxi_lcd_para_write(sel, 0x09);   
+	// sunxi_lcd_para_write(sel, 0x05);   
+	// sunxi_lcd_para_write(sel, 0x31);   
+	// sunxi_lcd_para_write(sel, 0x33);   
+	// sunxi_lcd_para_write(sel, 0x48);   
+	// sunxi_lcd_para_write(sel, 0x17);   
+	// sunxi_lcd_para_write(sel, 0x14);   
+	// sunxi_lcd_para_write(sel, 0x15);   
+	// sunxi_lcd_para_write(sel, 0x31);   
+	// sunxi_lcd_para_write(sel, 0x34);   
 
-	sunxi_lcd_cmd_write(sel, 0x65);
-	sunxi_lcd_para_write(sel, 0x7b);
-	sunxi_lcd_para_write(sel, 0xc0);
+	// sunxi_lcd_cmd_write(sel, 0xE1);     
+	// sunxi_lcd_para_write(sel, 0xD0);   
+	// sunxi_lcd_para_write(sel, 0x08);   
+	// sunxi_lcd_para_write(sel, 0x0E);   
+	// sunxi_lcd_para_write(sel, 0x09);   
+	// sunxi_lcd_para_write(sel, 0x09);   
+	// sunxi_lcd_para_write(sel, 0x15);   
+	// sunxi_lcd_para_write(sel, 0x31);   
+	// sunxi_lcd_para_write(sel, 0x33);   
+	// sunxi_lcd_para_write(sel, 0x48);   
+	// sunxi_lcd_para_write(sel, 0x17);   
+	// sunxi_lcd_para_write(sel, 0x14);   
+	// sunxi_lcd_para_write(sel, 0x15);   
+	// sunxi_lcd_para_write(sel, 0x31);   
+	// sunxi_lcd_para_write(sel, 0x34);
 
-	sunxi_lcd_cmd_write(sel, 0x67);
-	sunxi_lcd_para_write(sel, 0x33);
-
-	sunxi_lcd_cmd_write(sel, 0x68);
-	sunxi_lcd_para_write(sel, 0x00);
-	sunxi_lcd_para_write(sel, 0x12);
-	sunxi_lcd_para_write(sel, 0x10);
-	sunxi_lcd_para_write(sel, 0x14);
-
-	sunxi_lcd_cmd_write(sel, 0xf3);
-	sunxi_lcd_para_write(sel, 0x06); // thrb[5:0]
-	sunxi_lcd_para_write(sel, 0x04); // thg[5:0]
-
-	sunxi_lcd_cmd_write(sel, 0xf6);
-	sunxi_lcd_para_write(sel, 0x09);
-	sunxi_lcd_para_write(sel, 0x10);
-	sunxi_lcd_para_write(sel, 0x80); // 80--spi_2wire_mode,00
-
-	sunxi_lcd_cmd_write(sel, 0xf7);
-	sunxi_lcd_para_write(sel, 0x03);
-
-	///////////NV3029S GAMMA/////////////////
-	sunxi_lcd_cmd_write(sel, 0xe0); // gmama set 2.2
-	sunxi_lcd_para_write(sel, 0x10);  // PKP0[4:0]V3
-	sunxi_lcd_para_write(sel, 0x17);  // PKP1[4:0]V4
-	sunxi_lcd_para_write(sel, 0x09);  // PKP2[4:0]V10
-	sunxi_lcd_para_write(sel, 0x1a);  // PKP3[4:0]V21
-	sunxi_lcd_para_write(sel, 0x05);  // PKP4[4:0]V27
-	sunxi_lcd_para_write(sel, 0x0E);  // PKP5[4:0]V28
-	sunxi_lcd_para_write(sel, 0x15);  // PKP6[4:0]V15
-	sunxi_lcd_cmd_write(sel, 0xe3);
-	sunxi_lcd_para_write(sel, 0x09); // PKN0[4:0]V3
-	sunxi_lcd_para_write(sel, 0x17); // PKN1[4:0]V4
-	sunxi_lcd_para_write(sel, 0x10); // PKN2[4:0]V10
-	sunxi_lcd_para_write(sel, 0x19); // PKN3[4:0]V21
-	sunxi_lcd_para_write(sel, 0x08); // PKN4[4:0]V27
-	sunxi_lcd_para_write(sel, 0x14); // PKN5[4:0]V28
-	sunxi_lcd_para_write(sel, 0x13); // PKN6[4:0]V15
-	sunxi_lcd_cmd_write(sel, 0xe1);
-	sunxi_lcd_para_write(sel, 0x17); // PRP0[6:0]V5
-	sunxi_lcd_para_write(sel, 0x58); // PRP1[6:0]V26
-	sunxi_lcd_cmd_write(sel, 0xe4);
-	sunxi_lcd_para_write(sel, 0x16); // PRN0[6:0]V5
-	sunxi_lcd_para_write(sel, 0x59); // PRN1[6:0]V26
-	sunxi_lcd_cmd_write(sel, 0xe2);
-	sunxi_lcd_para_write(sel, 0x10); // VRP0[5:0]V0
-	sunxi_lcd_para_write(sel, 0x1d); // VRP1[5:0]V1
-	sunxi_lcd_para_write(sel, 0x1a); // VRP2[5:0]V2
-	sunxi_lcd_para_write(sel, 0x12); // VRP3[5:0]V29
-	sunxi_lcd_para_write(sel, 0x0a); // VRP4[5:0]V30
-	sunxi_lcd_para_write(sel, 0x0f); // VRP5[5:0]V31
-	sunxi_lcd_cmd_write(sel, 0xe5);
-	sunxi_lcd_para_write(sel, 0x02); // VRN0[5:0]V0
-	sunxi_lcd_para_write(sel, 0x1f); // VRN1[5:0]V1
-	sunxi_lcd_para_write(sel, 0x1c); // VRN2[5:0]V2
-	sunxi_lcd_para_write(sel, 0x18); // VRN3[5:0]V29
-	sunxi_lcd_para_write(sel, 0x12); // VRN4[5:0]V30
-	sunxi_lcd_para_write(sel, 0x30); // VRN5[5:0]V31
-
-	sunxi_lcd_cmd_write(sel, 0xEC);
-	sunxi_lcd_para_write(sel, 0xf6);
-	sunxi_lcd_cmd_write(sel, 0xED);
-	sunxi_lcd_para_write(sel, 0x02);
-	sunxi_lcd_para_write(sel, 0x94);
-
-	sunxi_lcd_cmd_write(sel, 0xfd);
-	sunxi_lcd_para_write(sel, 0xfa);
-	sunxi_lcd_para_write(sel, 0xfb);
-
-	sunxi_lcd_cmd_write(sel, 0x35);
-	sunxi_lcd_para_write(sel, 0x00);
-
-
-	/*MY MX MV ML RGB MH 0 0*/
-	if (info[sel].lcd_x > info[sel].lcd_y)
-		rotate = 0xa0;
-	else
-		rotate = 0xC0;
-
-
+	// sunxi_lcd_cmd_write(sel, 0xb2);
+	// sunxi_lcd_para_write(sel, 0, 0x05);
+	// sunxi_lcd_para_write(sel, 0x05);
+	// sunxi_lcd_para_write(sel, 0x00);
+	// sunxi_lcd_para_write(sel, 0x33);
+	// sunxi_lcd_para_write(sel, 0x33);
+	// sunxi_lcd_cmd_write(sel, 0xb7);
+	// sunxi_lcd_para_write(sel, 0x35);
+	// /*ST7789V Power setting */
+	// sunxi_lcd_cmd_write(sel, 0xb8);
+	// sunxi_lcd_para_write(sel, 0x2f);
+	// sunxi_lcd_para_write(sel, 0x2b);
+	// sunxi_lcd_para_write(sel, 0x2f);
+	// sunxi_lcd_cmd_write(sel, 0xbb);
+	// sunxi_lcd_para_write(sel, 0x20);
+	// sunxi_lcd_cmd_write(sel, 0xc0);
+	// sunxi_lcd_para_write(sel, 0x2c);
+	// sunxi_lcd_cmd_write(sel, 0xc2);
+	// sunxi_lcd_para_write(sel, 0x01);
+	// sunxi_lcd_cmd_write(sel, 0xc3);
+	// sunxi_lcd_para_write(sel, 0x0b);
+	// sunxi_lcd_cmd_write(sel, 0xc4);
+	// sunxi_lcd_para_write(sel, 0x20);
+	// sunxi_lcd_cmd_write(sel, 0xc6);
+	// sunxi_lcd_para_write(sel, 0x11);
+	// sunxi_lcd_cmd_write(sel, 0xd0);
+	// sunxi_lcd_para_write(sel, 0xa4);
+	// sunxi_lcd_para_write(sel, 0xa1);
+	// sunxi_lcd_cmd_write(sel, 0xe8);
+	// sunxi_lcd_para_write(sel, 0x03);
+	// sunxi_lcd_cmd_write(sel, 0xe9);
+	// sunxi_lcd_para_write(sel, 0x0d);
+	// sunxi_lcd_para_write(sel, 0x12);
+	// sunxi_lcd_para_write(sel, 0x00);
+	// /*ST7789V gamma setting */
+	// sunxi_lcd_cmd_write(sel, 0xe0);
+	// sunxi_lcd_para_write(sel, 0xd0);
+	// sunxi_lcd_para_write(sel, 0x06);
+	// sunxi_lcd_para_write(sel, 0x0b);
+	// sunxi_lcd_para_write(sel, 0x0a);
+	// sunxi_lcd_para_write(sel, 0x09);
+	// sunxi_lcd_para_write(sel, 0x05);
+	// sunxi_lcd_para_write(sel, 0x2e);
+	// sunxi_lcd_para_write(sel, 0x43);
+	// sunxi_lcd_para_write(sel, 0x44);
+	// sunxi_lcd_para_write(sel, 0x09);
+	// sunxi_lcd_para_write(sel, 0x16);
+	// sunxi_lcd_para_write(sel, 0x15);
+	// sunxi_lcd_para_write(sel, 0x23);
+	// sunxi_lcd_para_write(sel, 0x27);
+	// sunxi_lcd_cmd_write(sel, 0xe1);
+	// sunxi_lcd_para_write(sel, 0xd0);
+	// sunxi_lcd_para_write(sel, 0x06);
+	// sunxi_lcd_para_write(sel, 0x0b);
+	// sunxi_lcd_para_write(sel, 0x09);
+	// sunxi_lcd_para_write(sel, 0x08);
+	// sunxi_lcd_para_write(sel, 0x06);
+	// sunxi_lcd_para_write(sel, 0x2e);
+	// sunxi_lcd_para_write(sel, 0x44);
+	// sunxi_lcd_para_write(sel, 0x44);
+	// sunxi_lcd_para_write(sel, 0x3a);
+	// sunxi_lcd_para_write(sel, 0x15);
+	// sunxi_lcd_para_write(sel, 0x15);
+	// sunxi_lcd_para_write(sel, 0x23);
+	// sunxi_lcd_para_write(sel, 0x26);
+	
 	sunxi_lcd_cmd_write(sel, 0x3A); /* Interface Pixel Format */
-	/* 55----RGB565;66---RGB666 */
-	if (info[sel].lcd_pixel_fmt == LCDFB_FORMAT_RGB_565 ||
-	    info[sel].lcd_pixel_fmt == LCDFB_FORMAT_BGR_565) {
-		sunxi_lcd_para_write(sel, 0x65);
-		if (info[sel].lcd_pixel_fmt == LCDFB_FORMAT_RGB_565)
-			rotate &= 0xf7;
-		else
-			rotate |= 0x08;
-	} else if (info[sel].lcd_pixel_fmt < LCDFB_FORMAT_RGB_888) {
-		sunxi_lcd_para_write(sel, 0x66);
-		if (info[sel].lcd_pixel_fmt == LCDFB_FORMAT_BGRA_8888 ||
-		    info[sel].lcd_pixel_fmt == LCDFB_FORMAT_BGRX_8888 ||
-		    info[sel].lcd_pixel_fmt == LCDFB_FORMAT_ABGR_8888 ||
-		    info[sel].lcd_pixel_fmt == LCDFB_FORMAT_XBGR_8888) {
-			rotate |= 0x08;
-		}
-	} else {
-		sunxi_lcd_para_write(sel, 0x66);
-	}
+  sunxi_lcd_para_write(sel, 0x05);
+  
+	/*MY MX MV ML RGB MH 0 0*/
+	// if (info[sel].lcd_x > info[sel].lcd_y)
+	// 	rotate = 0xe0;
+	// else
+	// 	rotate = 0x80;
+
+	// /* 55----RGB565;66---RGB666 */
+	// if (info[sel].lcd_pixel_fmt == LCDFB_FORMAT_RGB_565 ||
+	//     info[sel].lcd_pixel_fmt == LCDFB_FORMAT_BGR_565) {
+	// 	sunxi_lcd_para_write(sel, 0x65);
+	// 	if (info[sel].lcd_pixel_fmt == LCDFB_FORMAT_RGB_565)
+	// 		rotate &= 0xf7;
+	// 	else
+	// 		rotate |= 0x08;
+	// } else if (info[sel].lcd_pixel_fmt < LCDFB_FORMAT_RGB_888) {
+	// 	sunxi_lcd_para_write(sel, 0x66);
+	// 	if (info[sel].lcd_pixel_fmt == LCDFB_FORMAT_BGRA_8888 ||
+	// 	    info[sel].lcd_pixel_fmt == LCDFB_FORMAT_BGRX_8888 ||
+	// 	    info[sel].lcd_pixel_fmt == LCDFB_FORMAT_ABGR_8888 ||
+	// 	    info[sel].lcd_pixel_fmt == LCDFB_FORMAT_XBGR_8888) {
+	// 		rotate |= 0x08;
+	// 	}
+	// } else {
+	// 	sunxi_lcd_para_write(sel, 0x66);
+	// }
+
+	sunxi_lcd_cmd_write(sel, 0x21);
 
 	if (info[sel].lcd_if == LCD_FB_IF_SPI) {
 		sunxi_lcd_cmd_write(sel, 0xb0);
@@ -225,16 +255,16 @@ static void LCD_panel_init(unsigned int sel)
 		sunxi_lcd_para_write(sel, 0xc8); /*Little endian*/
 	}
 
-	sunxi_lcd_cmd_write(sel, 0x36); /* Memory sunxi_lcd_para_write Access Control */
-	sunxi_lcd_para_write(sel, rotate);
+  sunxi_lcd_cmd_write(sel, 0x36); /* Memory sunxi_lcd_para_write Access Control */
+	// sunxi_lcd_para_write(sel, 0xC0); // 4 6 c e
+  sunxi_lcd_para_write(sel, 0xC0);
 
 	address(sel, 0, 0, info[sel].lcd_x - 1, info[sel].lcd_y - 1);
 
-	sunxi_lcd_cmd_write(sel, 0x11);
-	sunxi_lcd_delay_ms(120);
+	sunxi_lcd_cmd_write(sel, 0x13);
 	sunxi_lcd_cmd_write(sel, 0x29);
 	sunxi_lcd_cmd_write(sel, 0x2c); /* Display ON */
-
+	
 }
 
 static void LCD_panel_exit(unsigned int sel)
@@ -340,6 +370,8 @@ static s32 LCD_user_defined_func(u32 sel, u32 para1, u32 para2, u32 para3)
 
 static int lcd_set_var(unsigned int sel, struct fb_info *p_info)
 {
+	address(sel, 0, 0, info[sel].lcd_x - 1, info[sel].lcd_y - 1);
+	sunxi_lcd_cmd_write(sel, 0x2c);
 	return 0;
 }
 

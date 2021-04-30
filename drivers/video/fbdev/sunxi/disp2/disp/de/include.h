@@ -1173,6 +1173,7 @@ struct disp_manager {
 	s32 (*reg_protect)(struct disp_manager *mgr, bool protect);
 	s32 (*set_ksc_para)(struct disp_manager *mgr,
 				      struct disp_ksc_info *pinfo);
+	s32 (*enable_iommu)(struct disp_manager *mgr, bool en);
 };
 
 struct disp_layer {

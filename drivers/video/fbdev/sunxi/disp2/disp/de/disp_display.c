@@ -497,6 +497,7 @@ s32 disp_init_connections(struct disp_bsp_init_para *para)
 			dispdev = disp_device_get(disp, DISP_OUTPUT_TYPE_LCD);
 			if ((dispdev) && (dispdev->set_manager))
 				dispdev->set_manager(dispdev, mgr);
+			mgr->enable_iommu(mgr, true);
 		}
 
 #if defined(CONFIG_DISP2_SUNXI_SUPPORT_ENAHNCE)
@@ -743,6 +744,8 @@ static s32 disp_sync_all(u32 disp, bool sync)
 			if (dispdev->get_status(dispdev) != 0)
 				gdisp.screen[disp].health_info.error_cnt++;
 		}
+		if (sync == true)
+			mgr->enable_iommu(mgr, true);
 	}
 
 	return 0;

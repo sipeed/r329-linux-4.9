@@ -152,6 +152,11 @@
 #define DEVICE_LVDS_NUM 1
 #endif
 
+#ifndef IOMMU_DE0_MASTOR_ID
+#define IOMMU_DE0_MASTOR_ID 0
+#define IOMMU_DE1_MASTOR_ID 0
+#endif
+
 /* total number of DSI clk */
 #define CLK_DSI_NUM  (CLK_NUM_PER_DSI * DEVICE_DSI_NUM)
 

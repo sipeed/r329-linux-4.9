@@ -27,6 +27,10 @@
 #define GLB_MAX_CDC_NUM (3)
 #define GLB_MAX_CHN_NUM (6)
 
+#ifndef IOMMU_DE0_MASTOR_ID
+#define IOMMU_DE0_MASTOR_ID 0
+#define IOMMU_DE1_MASTOR_ID 0
+#endif
 /* #define SUPPORT_SMBL */
 
 #define VI_CHN_NUM (3)
