@@ -255,9 +255,9 @@ static void LCD_panel_init(unsigned int sel)
 		sunxi_lcd_para_write(sel, 0xc8); /*Little endian*/
 	}
 
-  sunxi_lcd_cmd_write(sel, 0x36); /* Memory sunxi_lcd_para_write Access Control */
+	sunxi_lcd_cmd_write(sel, 0x36); /* Memory sunxi_lcd_para_write Access Control */
 	// sunxi_lcd_para_write(sel, 0xC0); // 4 6 c e
-  sunxi_lcd_para_write(sel, 0xC0);
+	sunxi_lcd_para_write(sel, 0x00);
 
 	address(sel, 0, 0, info[sel].lcd_x - 1, info[sel].lcd_y - 1);
 
