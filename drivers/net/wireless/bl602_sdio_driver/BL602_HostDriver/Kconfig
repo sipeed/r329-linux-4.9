@@ -1,0 +1,6 @@
+menuconfig BL_FULLMAC
+	tristate "BoufalloLab FullMAC WLAN support"
+	default n
+	select CFG80211
+	help
+	  To compile this code as a module, choose M here.

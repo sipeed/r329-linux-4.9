@@ -34,6 +34,7 @@ source "drivers/net/wireless/ti/Kconfig"
 source "drivers/net/wireless/zydas/Kconfig"
 source "drivers/net/wireless/xr819/Kconfig"
 source "drivers/net/wireless/xr829/Kconfig"
+source "drivers/net/wireless/bl602_sdio_driver/BL602_HostDriver/Kconfig"
 
 config PCMCIA_RAYCS
 	tristate "Aviator/Raytheon 2.4GHz wireless support"
